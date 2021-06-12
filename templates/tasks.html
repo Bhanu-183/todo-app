@@ -1,0 +1,63 @@
+{%extends 'index.html'%} {% block title %}Todo App{%endblock%} {%block content%}
+<style>
+  input {
+    border-radius: 10px;
+    padding: 10px;
+  }
+</style>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <h1 class="display-3 text-center"><u> Tasks</u></h1>
+    <ul class="list-group">
+      {%for task in tasks%} {%if task.complete%}
+      <li class="list-group-item list-group-item-success">{{task.title}}</li>
+      {%else%}
+      <li class="list-group-item list-group-item-danger">{{task.title}}</li>
+      <form
+        action="{%url 'completed' task.id %}"
+        method="POST"
+        style="float: left"
+      >
+        {%csrf_token%}
+        <button class="btn btn-success" type="submit">Completed</button>
+      </form>
+      {%endif%}
+
+      <form action="{%url 'remove' task.id %}" method="POST" style="right: 0">
+        {%csrf_token%}
+        <button class="btn btn-danger" type="submit">REMOVE</button>
+      </form>
+      {%endfor%}
+    </ul>
+    <button
+      type="button"
+      class="btn btn-info btn-lg"
+      data-toggle="modal"
+      data-target="#myModal"
+    >
+      ADD TASK
+    </button>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Enter the Task</h4>
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="">
+          {%csrf_token%}
+          <input type="text" name="title" placeholder="Enter the task" />
+          <button type="submit" class="btn btn-success">ADD</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{%endblock%}
